@@ -9,7 +9,7 @@ function [distorction,power] = pixel_wise(lista)
         x=x+1;
         for i= 1:length(lista)
             tranf= imread(lista(i));
-            tranf=tranf*k;
+            tranf=uint8(tranf*k);
             %salvo l'immagine
             imwrite(tranf,"tmp.bmp")
             %per ogni immagine calcolare la distorsione dall'originale 
