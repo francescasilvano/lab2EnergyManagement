@@ -1,5 +1,5 @@
-%script pixer wise
-function pixel_wise(lista)
+%script pixer wise restituisce la distorsione e la power_saving
+function [distorction,power] = pixel_wise(lista)
     %lista di stringhe da cui prenderemo le immagini
     x=0;
     y=zeros(length(lista));
@@ -9,8 +9,7 @@ function pixel_wise(lista)
         x=x+1;
         for i= 1:length(lista)
             tranf= imread(lista(i));
-            blue=tranf(:,:,3)*k;
-            tranf(:,:,3)=blue;
+            tranf=tranf*k;
             %salvo l'immagine
             imwrite(tranf,"tmp.bmp")
             %per ogni immagine calcolare la distorsione dall'originale 
@@ -25,4 +24,6 @@ function pixel_wise(lista)
     x=0:length(y);
     plot(x,y)
     plot(x,z)
+    distorction=y;
+    power=z;
 end
