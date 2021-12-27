@@ -7,7 +7,7 @@ function pixel_wise(lista)
     for k= 0.5:0.1:0.9
         %0.5 0.6 0.7 0.8 0.9
         x=x+1;
-        for i= 1:lenght(lista)
+        for i= 1:length(lista)
             tranf= imread(lista(i));
             blue=tranf(:,:,3)*k;
             tranf(:,:,3)=blue;

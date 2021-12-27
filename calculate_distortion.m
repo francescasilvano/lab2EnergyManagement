@@ -11,7 +11,7 @@ function result = calculate_distortion(originale,trasformata)
     b_t=transLab(:,:,3);
     result=0;
     for i = 1:length(L_o)
-    result=result + square((L_t(i)-L_o(i))^2 + (a_t(i)-a_o(i))^2 + (b_t(i)- b_o(i))^2);
+    result=result + sqrt((L_t(i)-L_o(i))^2 + (a_t(i)-a_o(i))^2 + (b_t(i)- b_o(i))^2);
     end
     max= square(100^2+255^2+255^2);
     result=  100* result/( lenght(transformed(:,1,1))* lenght(transformed(1,:,1))*max);
