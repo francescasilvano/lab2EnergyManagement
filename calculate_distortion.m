@@ -1,6 +1,6 @@
-function result = calculate_distortion(stringa1,stringa2)
-    transformed=imread(stringa2);
-    original=imread(stringa1);
+function result = calculate_distortion(originale,trasformata)
+    transformed=imread(trasformata);
+    original=imread(originale);
     origLab=rgb2lab(original);
     transLab=rgb2lab(transformed);
     L_o=origLab(:,:,1);
