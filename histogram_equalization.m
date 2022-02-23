@@ -21,7 +21,7 @@ else
     %else it is gray
     transformed=histeq(img);
 end
-imshow(transformed);
+%imshow(transformed);
 %calculate the name of the image transformed in order to save it
 tmp=immagine;
 array=strsplit(tmp,'.');

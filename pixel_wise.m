@@ -24,6 +24,6 @@ function [distortion,power] = pixel_wise(immagine)
     x=0.5:0.1:0.9;
     %plot of the distortion and power saving for each k
     plot(x,distortion,'b-o',x,power,'r-*');
-    title('Pixel wise');
+    title('Piel wise '+immagine);
     legend('distortion','power');
 end

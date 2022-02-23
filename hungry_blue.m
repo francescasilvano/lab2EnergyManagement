@@ -23,7 +23,7 @@ function [distortion,power] = hungry_blue(immagine)
         end
         x=0:20:255;
         plot(x,distortion,'b-o',x,power,'r-*');
-        title('Hungry blue');
+        title('Hungry blue'+immagine);
         legend('distortion','power');
     else %when the image is b&w there is no blue
         distortion=0;

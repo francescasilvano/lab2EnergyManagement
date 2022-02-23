@@ -40,12 +40,12 @@ function [distortion,power] = bright_contrast_mul(immagine)
         figure
         x=1.2:0.1:1.5;
         plot(x,distortion(1,:),"r-o",x,distortion(2,:),"g-.",x,distortion(3,:),"b-*",x,distortion(4,:),"c-s",x,distortion(5,:),"m-d",x,distortion(6,:),"y-p",x,distortion(7,:),"k-h");
-        title('Bright contrast Distortion of the image');
+        title('Bright contrast Distortion of the '+immagine);
         legend('k=0.3',"k=0.4","k=0.5","k=0.6","k=0.7","k=0.8","k=0.9");
         figure
         %plot della power saving per l'immagine per ogni k
         plot(x,power(1,:),"r-o",x,power(2,:),"g-.",x,power(3,:),"b-*",x,power(4,:),"c-s",x,power(5,:),"m-d",x,power(6,:),"y-p",x,power(7,:),"k-h");
-        title('Bright contrast Power saving of the image');
+        title('Bright contrast Power saving of the '+immagine);
         legend('k=0.3',"k=0.4","k=0.5","k=0.6","k=0.7","k=0.8","k=0.9");
     else
         distortion=zeros(length(0.3:0.1:0.9),1);
@@ -69,7 +69,7 @@ function [distortion,power] = bright_contrast_mul(immagine)
         x=0.3:0.1:0.9;
         %plot distorction and power saving
         plot(x,distortion,'b-o',x,power,'r-*');
-        title('Bright contrast');
+        title('Bright contrast '+immagine);
         legend('distortion','power');
 
     end
