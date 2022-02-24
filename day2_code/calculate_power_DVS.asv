@@ -1,0 +1,8 @@
+function result = calculate_power_DVS(stringa)
+    A=imread(stringa);
+    for i=1:length(A(:,1,1))
+        for j
+end
+
+
+
