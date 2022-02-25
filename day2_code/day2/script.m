@@ -75,17 +75,17 @@ subplot(6,1,6)
 image(image_HS_saturated);         % display saturated HS
 
 %compute power consumption for rgb of the real image
-real_power=calculate_power_DVS(image_read);
+real_power=calculate_power_DVS(image_read,Vdd);
 %compute power consumption for rgb of the distorted image
-DVS_power=calculate_power_DVS(image_RGB_saturated);
+DVS_power=calculate_power_DVS(image_RGB_saturated,Vdd);
 %compute the power consmption for the Bright scaling
-BS_power=calculate_power_DVS(image_DVS_BS_saturated);
+BS_power=calculate_power_DVS(image_DVS_BS_saturated,Vdd);
 %compute the power consmption for the Contrast enhancement
-CE_power=calculate_power_DVS(image_DVS_CE_saturated);
+CE_power=calculate_power_DVS(image_DVS_CE_saturated,Vdd);
 %compute the power consmption for the Contrast enhancement and Bright scaling
-BS_CE_power=calculate_power_DVS(image_DVS_CE_BS_saturated);
+BS_CE_power=calculate_power_DVS(image_DVS_CE_BS_saturated,Vdd);
 %compute the power consmption for the histogram equalization
-HS_power=calculate_power_DVS(image_HS_saturated);
+HS_power=calculate_power_DVS(image_HS_saturated,Vdd);
 %histogram of the power consumption
 figure
 %histogram('Categories',{'real image power','DVS image power','BS image power','CE image power','BS&CE image power','HE image power'},'BinCounts',[real_power,DVS_power,BS_power,CE_power,BS_CE_power,HS_power],'FaceColor','r');
