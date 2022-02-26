@@ -2,7 +2,7 @@ clear all
 
 SATURATED = 1;
 %read the image
-image_read=imread("im9.tiff");
+image_read=imread("house.jpg");
 %analisi: più vdd è bassa più saturerà in fretta e il bianco sarà sempre
 %meno bianco, prendendo quindi Vdd basse si avrà un ottimo effetto del
 %power consuming
@@ -18,8 +18,8 @@ image_read=imread("im9.tiff");
 %devono aumentare
 Vdd = 13;
 VddMax=15;
-b_brightness_scaling=0.8-Vdd/VddMax;
-b_contrast_enhancement=VddMax/Vdd-0.1;
+b_brightness_scaling=1-Vdd/VddMax;
+b_contrast_enhancement=VddMax/Vdd;
 b_mix=Vdd/VddMax;
 %transform the image in current
 I_cell_sample=rgb2current(image_read);
@@ -63,16 +63,22 @@ image_HS_saturated=image_HS_saturated/255;
 
 subplot(3,2,1)
 image(image_read);                     % display real image
+title("real image");
 subplot(3,2,2)
 image(image_RGB_saturated);       % display saturated RGB image
+title("DVS image");
 subplot(3,2,3)
 image(image_DVS_BS_saturated);         % display saturated DVS Bright scaling
+title("Bright scaling & DVS");
 subplot(3,2,4)
 image(image_DVS_CE_saturated);         % display saturated DVS Contrast enhancement
+title("Contrast enhancement & DVS");
 subplot(3,2,5)
 image(image_DVS_CE_BS_saturated);         % display saturated both
+title("BS & CE & DVS");
 subplot(3,2,6)
 image(image_HS_saturated);         % display saturated HS
+title("Histogram equalization & DVS");
 
 %compute power consumption for rgb of the real image
 real_power=calculate_power_DVS(image_read,Vdd);
