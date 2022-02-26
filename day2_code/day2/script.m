@@ -32,7 +32,7 @@ image_bright_modified=brightness_scaling(image_read,b_brightness_scaling);
 imwrite(image_bright_modified,"tmp.jpg");
 image_bright_modified=imread("tmp.jpg");
 I_cell_sample=rgb2current(image_bright_modified);
-image_DVS_BS_saturated=displayed_image(I_cell_sample, Vdd, SATURATED);
+image_DVS_BS_saturated=displayed_image(I_cell_sample, Vdd-1, SATURATED);
 image_DVS_BS_saturated=image_DVS_BS_saturated/255;
 imshow(image_DVS_BS_saturated);
 
@@ -41,7 +41,7 @@ image_bright_modified=contrast_enhancement(image_read,b_contrast_enhancement);
 imwrite(image_bright_modified,"tmp.jpg");
 image_bright_modified=imread("tmp.jpg");
 I_cell_sample=rgb2current(image_bright_modified);
-image_DVS_CE_saturated=displayed_image(I_cell_sample, Vdd, SATURATED);
+image_DVS_CE_saturated=displayed_image(I_cell_sample, Vdd-1, SATURATED);
 image_DVS_CE_saturated=image_DVS_CE_saturated/255;
 
 %modify both
@@ -50,7 +50,7 @@ image_bright_modified=contrast_enhancement(image_bright_modified,b_mix);
 imwrite(image_bright_modified,"tmp.jpg");
 image_bright_modified=imread("tmp.jpg");
 I_cell_sample=rgb2current(image_bright_modified);
-image_DVS_CE_BS_saturated=displayed_image(I_cell_sample, Vdd, SATURATED);
+image_DVS_CE_BS_saturated=displayed_image(I_cell_sample, Vdd-1, SATURATED);
 image_DVS_CE_BS_saturated=image_DVS_CE_BS_saturated/255;
 
 %histogram equalization
@@ -61,17 +61,17 @@ I_cell_sample=rgb2current(image_histogram);
 image_HS_saturated=displayed_image(I_cell_sample, Vdd, SATURATED);
 image_HS_saturated=image_HS_saturated/255;
 
-subplot(6,1,1)
+subplot(3,2,1)
 image(image_read);                     % display real image
-subplot(6,1,2)
+subplot(3,2,2)
 image(image_RGB_saturated);       % display saturated RGB image
-subplot(6,1,3)
+subplot(3,2,3)
 image(image_DVS_BS_saturated);         % display saturated DVS Bright scaling
-subplot(6,1,4)
+subplot(3,2,4)
 image(image_DVS_CE_saturated);         % display saturated DVS Contrast enhancement
-subplot(6,1,5)
+subplot(3,2,5)
 image(image_DVS_CE_BS_saturated);         % display saturated both
-subplot(6,1,6)
+subplot(3,2,6)
 image(image_HS_saturated);         % display saturated HS
 
 %compute power consumption for rgb of the real image
@@ -79,17 +79,17 @@ real_power=calculate_power_DVS(image_read,Vdd);
 %compute power consumption for rgb of the distorted image
 DVS_power=calculate_power_DVS(image_RGB_saturated,Vdd);
 %compute the power consmption for the Bright scaling
-BS_power=calculate_power_DVS(image_DVS_BS_saturated,Vdd);
+BS_power=calculate_power_DVS(image_DVS_BS_saturated,Vdd-1);
 %compute the power consmption for the Contrast enhancement
-CE_power=calculate_power_DVS(image_DVS_CE_saturated,Vdd);
+CE_power=calculate_power_DVS(image_DVS_CE_saturated,Vdd-1);
 %compute the power consmption for the Contrast enhancement and Bright scaling
-BS_CE_power=calculate_power_DVS(image_DVS_CE_BS_saturated,Vdd);
+BS_CE_power=calculate_power_DVS(image_DVS_CE_BS_saturated,Vdd-1);
 %compute the power consmption for the histogram equalization
 HS_power=calculate_power_DVS(image_HS_saturated,Vdd);
 %histogram of the power consumption
 figure
-%histogram('Categories',{'real image power','DVS image power','BS image power','CE image power','BS&CE image power','HE image power'},'BinCounts',[real_power,DVS_power,BS_power,CE_power,BS_CE_power,HS_power],'FaceColor','r');
-histogram('Categories',{'DVS image power','BS image power','CE image power','BS&CE image power','HE image power'},'BinCounts',[DVS_power,BS_power,CE_power,BS_CE_power,HS_power],'FaceColor','r');
+histogram('Categories',{'real image power','DVS image power','BS image power','CE image power','BS&CE image power','HE image power'},'BinCounts',[real_power,DVS_power,BS_power,CE_power,BS_CE_power,HS_power],'FaceColor','r');
+%histogram('Categories',{'DVS image power','BS image power','CE image power','BS&CE image power','HE image power'},'BinCounts',[DVS_power,BS_power,CE_power,BS_CE_power,HS_power],'FaceColor','r');
 
 %compute distortion between original and DVS modified one
 DVS_distortion=calculate_distortion(image_read,image_RGB_saturated);
