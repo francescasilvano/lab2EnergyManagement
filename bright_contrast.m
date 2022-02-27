@@ -35,12 +35,14 @@ function [distortion,power] = bright_contrast(image,dist,ext)
                 img_display{end+1}=img_tmp;
             end
         end
-        figure
-        plot(y,distortion,'b-o',y,power,'r-*');
-        title('Bright contrast');
-        legend('distortion','power saving');
-        figure
-        montage(img_display);
+        if(x>0)
+            figure
+            plot(y,distortion,'b-o',y,power,'r-*');
+            title('Bright contrast');
+            legend('distortion','power saving');
+            figure
+            montage(img_display);
+        end
     else %b&W
         x=0;
         img_display={};

@@ -1,0 +1,100 @@
+function evaluation_DVS(immagini,Vdd)
+    SATURATED = 1;
+    VddMax=15;
+    b_brightness_scaling=1-Vdd/VddMax;
+    b_contrast_enhancement=VddMax/Vdd;
+    b_mix=Vdd/VddMax;
+    for i=length(immagini)
+        %read the image
+        image_read=imread(string(immagini(i)));
+        %transform the image in current
+        I_cell_sample=rgb2current(image_read);
+        %get displayed RGB image with cell current and supply voltage with two mode
+        image_RGB_saturated = displayed_image(I_cell_sample, Vdd, SATURATED); 
+        image_RGB_saturated=image_RGB_saturated/255;
+        
+        %brightness_scaling
+        image_bright_modified=brightness_scaling(image_read,b_brightness_scaling);
+        imwrite(image_bright_modified,"tmp.jpg");
+        image_bright_modified=imread("tmp.jpg");
+        I_cell_sample=rgb2current(image_bright_modified);
+        image_DVS_BS_saturated=displayed_image(I_cell_sample, Vdd-1, SATURATED);
+        image_DVS_BS_saturated=image_DVS_BS_saturated/255;
+        imshow(image_DVS_BS_saturated);
+        
+        %Contrast enhancement
+        image_bright_modified=contrast_enhancement(image_read,b_contrast_enhancement);
+        imwrite(image_bright_modified,"tmp.jpg");
+        image_bright_modified=imread("tmp.jpg");
+        I_cell_sample=rgb2current(image_bright_modified);
+        image_DVS_CE_saturated=displayed_image(I_cell_sample, Vdd-1, SATURATED);
+        image_DVS_CE_saturated=image_DVS_CE_saturated/255;
+        
+        %modify both
+        image_bright_modified=brightness_scaling(image_read,b_brightness_scaling);
+        image_bright_modified=contrast_enhancement(image_bright_modified,b_mix);
+        imwrite(image_bright_modified,"tmp.jpg");
+        image_bright_modified=imread("tmp.jpg");
+        I_cell_sample=rgb2current(image_bright_modified);
+        image_DVS_CE_BS_saturated=displayed_image(I_cell_sample, Vdd-1, SATURATED);
+        image_DVS_CE_BS_saturated=image_DVS_CE_BS_saturated/255;
+        
+        %histogram equalization
+        image_histogram=histogram_equalization(image_read);
+        imwrite(image_histogram,"tmp.jpg");
+        image_histogram=imread("tmp.jpg");
+        I_cell_sample=rgb2current(image_histogram);
+        image_HS_saturated=displayed_image(I_cell_sample, Vdd, SATURATED);
+        image_HS_saturated=image_HS_saturated/255;
+        
+        subplot(3,2,1)
+        image(image_read);                     % display real image
+        title("real image");
+        subplot(3,2,2)
+        image(image_RGB_saturated);       % display saturated RGB image
+        title("DVS image");
+        subplot(3,2,3)
+        image(image_DVS_BS_saturated);         % display saturated DVS Bright scaling
+        title("Bright scaling & DVS");
+        subplot(3,2,4)
+        image(image_DVS_CE_saturated);         % display saturated DVS Contrast enhancement
+        title("Contrast enhancement & DVS");
+        subplot(3,2,5)
+        image(image_DVS_CE_BS_saturated);         % display saturated both
+        title("BS & CE & DVS");
+        subplot(3,2,6)
+        image(image_HS_saturated);         % display saturated HS
+        title("Histogram equalization & DVS");
+        
+        %compute power consumption for rgb of the real image
+        real_power=calculate_power_DVS(image_read,Vdd);
+        %compute power consumption for rgb of the distorted image
+        DVS_power=calculate_power_DVS(image_RGB_saturated,Vdd);
+        %compute the power consmption for the Bright scaling
+        BS_power=calculate_power_DVS(image_DVS_BS_saturated,Vdd-1);
+        %compute the power consmption for the Contrast enhancement
+        CE_power=calculate_power_DVS(image_DVS_CE_saturated,Vdd-1);
+        %compute the power consmption for the Contrast enhancement and Bright scaling
+        BS_CE_power=calculate_power_DVS(image_DVS_CE_BS_saturated,Vdd-1);
+        %compute the power consmption for the histogram equalization
+        HS_power=calculate_power_DVS(image_HS_saturated,Vdd);
+        %histogram of the power consumption
+        figure
+        histogram('Categories',{'real image power','DVS image power','BS image power','CE image power','BS&CE image power','HE image power'},'BinCounts',[real_power,DVS_power,BS_power,CE_power,BS_CE_power,HS_power],'FaceColor','r');
+        %histogram('Categories',{'DVS image power','BS image power','CE image power','BS&CE image power','HE image power'},'BinCounts',[DVS_power,BS_power,CE_power,BS_CE_power,HS_power],'FaceColor','r');
+        
+        %compute distortion between original and DVS modified one
+        DVS_distortion=calculate_distortion(image_read,image_RGB_saturated);
+        %compute distortion between original and BS one
+        BS_distortion=calculate_distortion(image_read,image_DVS_BS_saturated);
+        %compute distortion between original and CE one
+        CE_distortion=calculate_distortion(image_read,image_DVS_CE_saturated);
+        %compute distortion between original and CE&BE one
+        CE_BS_distortion=calculate_distortion(image_read,image_DVS_CE_BS_saturated);
+        %compute distortion between original and HS one
+        HS_distortion=calculate_distortion(image_read,image_HS_saturated);
+        %histogram of the distortion
+        figure
+        histogram('Categories',{'DVS distortion','BS distortion','CE distortion','BS&CE distortion','HE distortion'},'BinCounts',[DVS_distortion,BS_distortion,CE_distortion,CE_BS_distortion,HS_distortion],'FaceColor','g');
+    end
+end
