@@ -1,6 +1,6 @@
-function result = power_saving(stringa_o,stringa_t)
-    power_o=calculate_power(stringa_o);
-    power_t=calculate_power(stringa_t);
+function result = power_saving(original,transformed)
+    power_o=calculate_power(original);
+    power_t=calculate_power(transformed);
     %check for safety
     if(power_o==0)
         result=0;

@@ -1,29 +1,32 @@
-%script pixer wise restituisce la distorsione e la power_saving for k 0.5
-%to 0.9
-function [distortion,power] = pixel_wise(immagine)
-    distortion=zeros(5,1);
-    power=zeros(5,1);
+%script pixer wise return a vector 
+function [distortion,power] = pixel_wise(image,dist,ext)
     x=0;
-    for k= 0.5:0.1:0.9
-        x=x+1;
-        %0.5 0.6 0.7 0.8 0.9
-        %read the image
-        tranf= imread(immagine);
+    figure
+    for k= 0.1:0.1:0.9
+        %take the image
+        tranf= image;
         %modify it
         tranf=uint8(tranf*k);
-        %calculate the name of the image transformed in order to save it
-        tmp=immagine;
-        array=strsplit(tmp,'.');
-        name=strcat(array(1),"_pw",sprintf('%.1f',k),".",array(2));
-        imwrite(tranf,name);
         %for each image calculate the distortion
-        distortion(x)=calculate_distortion(immagine,name);
-        % and the power saving
-        power(x)=power_saving(immagine,name);
+        tmp=calculate_distortion(image,tranf);
+        if(tmp<=dist)
+            x=x+1;
+            distortion(x)=tmp;
+            % and the power saving
+            power(x)=power_saving(image,tranf);
+            y(x)=k;
+            %display it if distortion(x) <distortion
+            subplot(3,3,x);
+            imshow(tranf);
+            title("Pixel wise "+string(k));
+        end
     end
-    x=0.5:0.1:0.9;
-    %plot of the distortion and power saving for each k
-    plot(x,distortion,'b-o',x,power,'r-*');
-    title('Piel wise '+immagine);
-    legend('distortion','power');
+    %check if there is some value
+    if(x>0)
+        figure
+        %plot of the distortion and power saving for each y
+        plot(y,distortion,'b-o',y,power,'r-*');
+        title('Pixel wise');
+        legend('distortion','power saving');
+    end
 end

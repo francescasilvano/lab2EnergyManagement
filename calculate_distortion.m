@@ -1,7 +1,5 @@
-function result = calculate_distortion(originale,trasformata)
-    transformed=imread(trasformata);
-    original=imread(originale);
-    if(length(original)== 3)
+function result = calculate_distortion(original,transformed)
+    if(length(original(1,1,:))== 3)
         origLab=rgb2lab(original);
         transLab=rgb2lab(transformed);
         L_o=origLab(:,:,1);

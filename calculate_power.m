@@ -1,5 +1,4 @@
-function result = calculate_power(stringa)
-    A=imread(stringa);
+function result = calculate_power(A)
     w0=1.48169521*10^(-6);
     wr=2.13636845*10^(-7);
     wg=2.13636845*10^(-7);
