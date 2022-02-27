@@ -42,6 +42,9 @@ function [distortion,power] = bright_contrast(image,dist,ext)
             legend('distortion','power saving');
             figure
             montage(img_display);
+        else
+            distortion=0;
+            power=0;
         end
     else %b&W
         x=0;
