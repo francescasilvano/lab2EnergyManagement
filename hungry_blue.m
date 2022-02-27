@@ -1,5 +1,4 @@
 function [distortion,power] = hungry_blue(immagine,dist)
-    if(length(immagine(1,1,:))== 3)%if it is colored go on otherwise it is usefull
         x=0;
         img_display={};
         %create the vector for the saving
@@ -7,7 +6,11 @@ function [distortion,power] = hungry_blue(immagine,dist)
             %0 20 40 60..
             tranf= immagine;
             %1 red 2 green 3 blue, subtract each time more blue
-            tranf(:,:,3)=tranf(:,:,3) - k;
+            if(length(immagine(1,1,:))== 3)%if it is colored go on otherwise it is usefull
+                tranf(:,:,3)=tranf(:,:,3) - k;
+            else
+                tranf=uint8(double(tranf)-k/3);
+            end
             tmp=calculate_distortion(immagine,tranf);
             if(tmp<=dist)
                 x=x+1;
@@ -31,8 +34,4 @@ function [distortion,power] = hungry_blue(immagine,dist)
             figure
             montage(img_display);
         end
-    else %when the image is b&w there is no blue
-        distortion=0;
-        power=0;
-    end
 end

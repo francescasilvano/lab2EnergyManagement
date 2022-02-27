@@ -5,10 +5,9 @@ function [distortion,power] = bright_contrast(image,dist,ext)
         for k=0.1:0.1:0.4 %bright
             hsv_transf=rgb2hsv(image);
             bright=hsv_transf(:,:,3);
-            bright=bright+k;
             power_max=-1;
             for g=0.1:0.1:0.9 %contrast
-                bright_g=bright*g;
+                bright_g=bright*g+k;
                 hsv_transf(:,:,3)=bright_g;
                 %calculate distortion if ok with constrain save it
                 %otherwise go on
